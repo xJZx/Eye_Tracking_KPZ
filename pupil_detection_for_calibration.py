@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import csv
 
 
 def start_eye_tracking_calibration():
@@ -71,4 +72,8 @@ def start_eye_tracking_calibration():
                 break
 
     print(saved_coordinates)
+    with open('calibration_coordinates.csv', mode='w', newline='') as file_csv:
+        writer = csv.writer(file_csv)
+        for coordinate in saved_coordinates:
+            writer.writerow(coordinate)
     cv2.destroyAllWindows()

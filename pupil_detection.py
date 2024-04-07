@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import csv
 
 
 def start_eye_tracking():
@@ -11,6 +12,14 @@ def start_eye_tracking():
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     print("Resolution set to {}x{}".format(width, height))
 
+    saved_coordinates = []
+
+    with open('calibration_coordinates.csv', mode='r', newline='') as file_csv:
+        reader = csv.reader(file_csv)
+        for row in reader:
+            saved_coordinates.append([int(float(row[0])), int(float(row[1]))])
+
+    print(saved_coordinates)
 
     while True:
 
@@ -37,7 +46,14 @@ def start_eye_tracking():
             cv2.line(frame, (0, y + int(h/2)), (cols, y + int(h/2)), (0, 255, 0), 2)
             break
 
-        cv2.imshow("Threshold", threshold)
+        # (x1, y1), ((x1 + (x2 - x1), (y1 + (y2 - y1))        (x2 - x1) = width        (y2 - y1) = height
+        (x1, y1) = saved_coordinates[2]  # bo lustrzane odbicie w kamerze
+        (x2, y2) = saved_coordinates[6]  # bo lustrzane odbicie w kamerze
+        # print(type(x2), type(x1))
+        # print(x2, x1)
+        cv2.rectangle(frame, (x2, y2), (x1, y1), (0, 0, 255), 2)
+
+        cv2.imshow("threshold", threshold)
         cv2.imshow("gray frame", gray_frame)
         cv2.imshow("frame", frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):

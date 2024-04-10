@@ -56,8 +56,11 @@ class CalibrationApp:
 
     def toggle_rendering(self, event):
         if event.keysym == 'space':
-            self.actual_circle += 1
-            self.draw_calibration()
+            if self.actual_circle < 8:
+                self.actual_circle += 1
+                self.draw_calibration()
+            else:
+                self.master.quit()
 
 
 def start_app():

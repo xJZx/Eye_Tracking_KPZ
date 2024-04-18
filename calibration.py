@@ -1,6 +1,4 @@
 import tkinter as tk
-import keyboard
-import threading
 
 
 class CalibrationApp:
@@ -37,20 +35,20 @@ class CalibrationApp:
     def draw_calibration_points(self):
         for x, y in self.circle_coords:
             if x == 0 and y == 0:
-                circle = self.canvas.create_oval(x, y, x + self.radius * 2, y + self.radius * 2, fill='green',
+                self.canvas.create_oval(x, y, x + self.radius * 2, y + self.radius * 2, fill='green',
                                                  outline='green')
             else:
-                circle = self.canvas.create_oval(x, y, x + self.radius * 2, y + self.radius * 2, fill='red',
+                self.canvas.create_oval(x, y, x + self.radius * 2, y + self.radius * 2, fill='red',
                                                  outline='red')
 
     def draw_calibration(self):
         i = 0
         for x, y in self.circle_coords:
             if i == self.actual_circle:
-                circle = self.canvas.create_oval(x, y, x + self.radius * 2, y + self.radius * 2, fill='green',
+                self.canvas.create_oval(x, y, x + self.radius * 2, y + self.radius * 2, fill='green',
                                                  outline='green')
             else:
-                circle = self.canvas.create_oval(x, y, x + self.radius * 2, y + self.radius * 2, fill='red',
+                self.canvas.create_oval(x, y, x + self.radius * 2, y + self.radius * 2, fill='red',
                                                  outline='red')
             i += 1
 

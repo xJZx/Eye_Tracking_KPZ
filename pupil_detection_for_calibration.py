@@ -12,7 +12,6 @@ def start_eye_tracking_calibration():
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     print("Resolution set to {}x{}".format(width, height))
 
-
     while True:
 
         # video = False  # wait for frame from USB device
@@ -80,3 +79,4 @@ def start_eye_tracking_calibration():
         for coordinate in saved_coordinates:
             writer.writerow(coordinate)
     cv2.destroyAllWindows()
+

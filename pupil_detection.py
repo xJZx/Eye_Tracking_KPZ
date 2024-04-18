@@ -1,5 +1,7 @@
 import cv2
 import csv
+import numpy as np
+import pyautogui as pg
 
 
 def start_eye_tracking():
@@ -21,6 +23,9 @@ def start_eye_tracking():
     print(saved_coordinates)
 
     while True:
+        screenshot = cv2.cvtColor(np.array(pg.screenshot()), cv2.COLOR_RGB2BGR)
+        cv2.imshow('captured_screen', screenshot)
+
         # video = False  # wait for frame from USB device
         # while video == False:
         video, frame = cap.read()  # keep reading until we get a frame
@@ -70,6 +75,12 @@ def start_eye_tracking():
                 cv2.line(roi, (x + int(w / 2), 0), (x + int(w / 2), rows), (0, 255, 0), 2)
                 cv2.line(roi, (0, y + int(h / 2)), (cols, y + int(h / 2)), (0, 255, 0), 2)
             break
+
+        s_x = int(screenshot.shape[:1][0]) / (saved_coordinates[0][0] - saved_coordinates[2][0])
+        s_y = int(screenshot.shape[:2][0]) / (saved_coordinates[0][1] - saved_coordinates[2][1])
+        new_x = s_x * x_middle
+        new_y = s_y * y_middle
+        cv2.circle(screenshot, (int(new_x), int(new_y)), 1, (255, 0, 0), -1)
 
         cv2.imshow("threshold", threshold)
         cv2.imshow("gray frame", gray_frame)

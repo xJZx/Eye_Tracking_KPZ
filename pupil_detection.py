@@ -1,5 +1,4 @@
 import cv2
-import numpy as np
 import csv
 
 
@@ -24,7 +23,7 @@ def start_eye_tracking():
     while True:
 
         video = False  # wait for frame from USB device
-        while video == False:
+        while not video:
             video, frame = cap.read()  # keep reading until we get a frame
 
         rows, cols, _ = frame.shape
@@ -40,7 +39,6 @@ def start_eye_tracking():
 
         for cnt in contours:
             (x, y, w, h) = cv2.boundingRect(cnt)
-            #cv2.drawContours(frame, [cnt], -1, (0, 0, 255), 3)
             cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
             cv2.line(frame, (x + int(w/2), 0), (x + int(w/2), rows), (0, 255, 0), 2)
             cv2.line(frame, (0, y + int(h/2)), (cols, y + int(h/2)), (0, 255, 0), 2)
@@ -49,8 +47,6 @@ def start_eye_tracking():
         # (x1, y1), ((x1 + (x2 - x1), (y1 + (y2 - y1))        (x2 - x1) = width        (y2 - y1) = height
         (x1, y1) = saved_coordinates[2]  # bo lustrzane odbicie w kamerze
         (x2, y2) = saved_coordinates[6]  # bo lustrzane odbicie w kamerze
-        # print(type(x2), type(x1))
-        # print(x2, x1)
         cv2.rectangle(frame, (x2, y2), (x1, y1), (0, 0, 255), 2)
 
         cv2.imshow("threshold", threshold)

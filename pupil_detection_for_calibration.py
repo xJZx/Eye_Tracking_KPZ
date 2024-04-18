@@ -1,20 +1,9 @@
 import cv2
-import numpy as np
 import csv
 
 
 def start_eye_tracking_calibration():
     saved_coordinates = []
-
-    top_left = (0, 0)
-    top_middle = (0, 0)
-    top_right = (0, 0)
-    left_middle = (0, 0)
-    middle = (0, 0)
-    right_middle = (0, 0)
-    bottom_left = (0, 0)
-    bottom_middle = (0, 0)
-    bottom_right = (0, 0)
 
     cap = cv2.VideoCapture(0)
 
@@ -25,9 +14,8 @@ def start_eye_tracking_calibration():
 
 
     while True:
-
         video = False # wait for frame from USB device
-        while video == False:
+        while not video:
             video, frame = cap.read() # keep reading until we get a frame
 
         rows, cols, _ = frame.shape
@@ -51,7 +39,6 @@ def start_eye_tracking_calibration():
             (x, y, w, h) = cv2.boundingRect(cnt)
             x_middle = x + (abs(x - w) / 2)
             y_middle = y + (abs(y - h) / 2)
-            # cv2.drawContours(frame, [cnt], -1, (0, 0, 255), 3)
             cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
             cv2.line(frame, (x + int(w/2), 0), (x + int(w/2), rows), (0, 255, 0), 2)
             cv2.line(frame, (0, y + int(h/2)), (cols, y + int(h/2)), (0, 255, 0), 2)

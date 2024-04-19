@@ -26,16 +26,11 @@ def start_eye_tracking():
         screenshot = cv2.cvtColor(np.array(pg.screenshot()), cv2.COLOR_RGB2BGR)
         cv2.imshow('captured_screen', screenshot)
 
-        # video = False  # wait for frame from USB device
-        # while video == False:
         video, frame = cap.read()  # keep reading until we get a frame
-
 
         roi = frame[100:500, 100:500]
 
         rows, cols, _ = roi.shape
-        # gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        # gray_frame = cv2.GaussianBlur(gray_frame, (7, 7), 0)
 
         gray_frame = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
         gray_frame = cv2.GaussianBlur(gray_frame, (7, 7), 0)
@@ -44,17 +39,6 @@ def start_eye_tracking():
         contours, _ = cv2.findContours(threshold, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         contours = sorted(contours, key=lambda x: cv2.contourArea(x), reverse=True)
 
-        for cnt in contours:
-            (x, y, w, h) = cv2.boundingRect(cnt)
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
-            cv2.line(frame, (x + int(w/2), 0), (x + int(w/2), rows), (0, 255, 0), 2)
-            cv2.line(frame, (0, y + int(h/2)), (cols, y + int(h/2)), (0, 255, 0), 2)
-            break
-
-        # (x1, y1), ((x1 + (x2 - x1), (y1 + (y2 - y1))        (x2 - x1) = width        (y2 - y1) = height
-        (x1, y1) = saved_coordinates[2]  # bo lustrzane odbicie w kamerze
-        (x2, y2) = saved_coordinates[6]  # bo lustrzane odbicie w kamerze
-        cv2.rectangle(frame, (x2, y2), (x1, y1), (0, 0, 255), 2)
         # (x1, y1), ((x1 + (x2 - x1), (y1 + (y2 - y1))        (x2 - x1) = width        (y2 - y1) = height
         (x1, y1) = saved_coordinates[2]  # bo lustrzane odbicie w kamerze
         (x2, y2) = saved_coordinates[6]  # bo lustrzane odbicie w kamerze

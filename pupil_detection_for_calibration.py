@@ -13,16 +13,11 @@ def start_eye_tracking_calibration():
     print("Resolution set to {}x{}".format(width, height))
 
     while True:
-
-        # video = False  # wait for frame from USB device
-        # while not video:
         video, frame = cap.read()  # keep reading until we get a frame
 
         roi = frame[100:500, 100:500]
 
         rows, cols, _ = roi.shape
-        # gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        # gray_frame = cv2.GaussianBlur(gray_frame, (7, 7), 0)
 
         gray_frame = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
         gray_frame = cv2.GaussianBlur(gray_frame, (7, 7), 0)
@@ -39,11 +34,6 @@ def start_eye_tracking_calibration():
 
         for cnt in contours:
             (x, y, w, h) = cv2.boundingRect(cnt)
-            x_middle = x + (abs(x - w) / 2)
-            y_middle = y + (abs(y - h) / 2)
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
-            cv2.line(frame, (x + int(w/2), 0), (x + int(w/2), rows), (0, 255, 0), 2)
-            cv2.line(frame, (0, y + int(h/2)), (cols, y + int(h/2)), (0, 255, 0), 2)
 
             if w > 10 and h > 10:
                 x_middle = int(x + (w / 2))

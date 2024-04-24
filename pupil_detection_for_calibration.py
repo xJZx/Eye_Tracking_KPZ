@@ -5,7 +5,7 @@ import csv
 def start_eye_tracking_calibration():
     saved_coordinates = []
 
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(1)
 
     # Check if the width and height were set successfully
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -38,6 +38,7 @@ def start_eye_tracking_calibration():
             if w > 10 and h > 10:
                 x_middle = int(x + (w / 2))
                 y_middle = int(y + (h / 2))
+            else:
                 print("Eye not detected!")
 
             # cv2.drawContours(frame, [cnt], -1, (0, 0, 255), 3)

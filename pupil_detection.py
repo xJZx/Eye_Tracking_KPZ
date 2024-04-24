@@ -6,7 +6,7 @@ import pyautogui as pg
 
 def start_eye_tracking():
 
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(1)
 
     # Check if the width and height were set successfully
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -24,7 +24,6 @@ def start_eye_tracking():
 
     while True:
         screenshot = cv2.cvtColor(np.array(pg.screenshot()), cv2.COLOR_RGB2BGR)
-        cv2.imshow('captured_screen', screenshot)
 
         video, frame = cap.read()  # keep reading until we get a frame
 
@@ -58,18 +57,42 @@ def start_eye_tracking():
                 cv2.rectangle(roi, (x, y), (x + w, y + h), (255, 0, 0), 2)
                 cv2.line(roi, (x + int(w / 2), 0), (x + int(w / 2), rows), (0, 255, 0), 2)
                 cv2.line(roi, (0, y + int(h / 2)), (cols, y + int(h / 2)), (0, 255, 0), 2)
+
+                # mirroring where the eye is looking
+                x_middle = abs(x_middle - x2)
+                y_middle = abs(y1 - y_middle)
             break
 
-        s_x = int(screenshot.shape[:1][0]) / (saved_coordinates[0][0] - saved_coordinates[2][0])
-        s_y = int(screenshot.shape[:2][0]) / (saved_coordinates[0][1] - saved_coordinates[2][1])
+        # s = screenshot.shape[:2][1] / screenshot.shape[:2][0]
+        s_x = int(screenshot.shape[:2][1]) / (saved_coordinates[0][0] - saved_coordinates[2][0])
+        s_y = int(screenshot.shape[:2][0]) / (saved_coordinates[6][1] - saved_coordinates[0][1])
         new_x = s_x * x_middle
         new_y = s_y * y_middle
-        cv2.circle(screenshot, (int(new_x), int(new_y)), 1, (255, 0, 0), -1)
+        # new_x = s * x_middle
+        # new_y = s * y_middle
+        cv2.circle(screenshot, (int(new_x), int(new_y)), 5, (0, 0, 255), -1)
+
+        print("xmid", x_middle)
+        print("ymid", y_middle)
+        print((saved_coordinates[0][0] - saved_coordinates[2][0]))
+        print((saved_coordinates[6][1] - saved_coordinates[0][1]))
+        print(screenshot.shape)
+        print(screenshot.shape[:2][0])
+        print(screenshot.shape[:2][1])
+        print("sx", s_x)
+        print("sy", s_y)
+        # print("s", s)
+        print("x", new_x)
+        print("x i", int(new_x))
+        print("y", new_y)
+        print("y i", int(new_y))
+
 
         cv2.imshow("threshold", threshold)
         cv2.imshow("gray frame", gray_frame)
         cv2.imshow("frame", frame)
         cv2.imshow("roi", roi)
+        cv2.imshow('captured_screen', screenshot)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     cv2.destroyAllWindows()

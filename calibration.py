@@ -1,4 +1,7 @@
 import tkinter as tk
+import keyboard
+import threading
+import time
 
 
 class CalibrationApp:
@@ -17,6 +20,8 @@ class CalibrationApp:
         self.actual_circle = 0
 
         self.master.bind('<Key>', self.toggle_rendering)
+        # self.listener_thread = threading.Thread(target=self.toggle_rendering)
+        # self.listener_thread.start()
 
         self.circle_coords = [
             (0, 0),  # Top left corner
@@ -59,6 +64,16 @@ class CalibrationApp:
                 self.draw_calibration()
             else:
                 self.master.quit()
+
+        # while True:
+        #     if keyboard.is_pressed("space"):
+        #         if self.actual_circle < 8:
+        #             self.actual_circle += 1
+        #             self.draw_calibration()
+        #         else:
+        #             self.master.quit()
+
+            # time.sleep(0.1)  # Avoid high CPU usage
 
 
 def start_app():

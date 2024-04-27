@@ -6,7 +6,7 @@ import pyautogui as pg
 
 def start_eye_tracking():
 
-    cap = cv2.VideoCapture(1)
+    cap = cv2.VideoCapture(0)
 
     # Check if the width and height were set successfully
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -74,8 +74,8 @@ def start_eye_tracking():
 
         print("xmid", x_middle)
         print("ymid", y_middle)
-        print((saved_coordinates[0][0] - saved_coordinates[2][0]))
-        print((saved_coordinates[6][1] - saved_coordinates[0][1]))
+        print("width", (saved_coordinates[0][0] - saved_coordinates[2][0]))
+        print("height", (saved_coordinates[6][1] - saved_coordinates[0][1]))
         print(screenshot.shape)
         print(screenshot.shape[:2][0])
         print(screenshot.shape[:2][1])

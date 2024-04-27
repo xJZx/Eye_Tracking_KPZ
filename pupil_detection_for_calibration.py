@@ -1,11 +1,13 @@
 import cv2
 import csv
+import keyboard
+import time
 
 
 def start_eye_tracking_calibration():
     saved_coordinates = []
 
-    cap = cv2.VideoCapture(1)
+    cap = cv2.VideoCapture(0)
 
     # Check if the width and height were set successfully
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -35,7 +37,7 @@ def start_eye_tracking_calibration():
         for cnt in contours:
             (x, y, w, h) = cv2.boundingRect(cnt)
 
-            if w > 10 and h > 10:
+            if w > 5 and h > 5:
                 x_middle = int(x + (w / 2))
                 y_middle = int(y + (h / 2))
             else:
@@ -56,15 +58,29 @@ def start_eye_tracking_calibration():
         key = cv2.waitKey(1)
         if key & 0xFF == ord('q'):
             break
-        elif key == ord(' '):
+        # elif key == ord(' '):
+        elif keyboard.is_pressed("space"):
             if x_middle != 0 and y_middle != 0:
-                if len(saved_coordinates) < 8:
-                    saved_coordinates.append((x_middle, y_middle))
+                if len(saved_coordinates) < 9:
+                    # added extra margin for error
+                    if len(saved_coordinates) < 3:
+                        saved_coordinates.append((x_middle, y_middle - 15))
+                    elif len(saved_coordinates) > 5:
+                        saved_coordinates.append((x_middle, y_middle + 15))
+                    else:
+                        saved_coordinates.append((x_middle, y_middle))
                 else:
-                    saved_coordinates.append((x_middle, y_middle))
                     break
+            time.sleep(0.2)  # Avoid high CPU usage
 
     print(saved_coordinates)
+    # saved_coordinates[0][0] += saved_coordinates[0][0] - 10
+    # saved_coordinates[1][0] += saved_coordinates[1][0] - 10
+    # saved_coordinates[2][0] += saved_coordinates[2][0] - 10
+    #
+    # saved_coordinates[6][0] += saved_coordinates[6][0] + 10
+    # saved_coordinates[7][0] += saved_coordinates[7][0] + 10
+    # saved_coordinates[8][0] += saved_coordinates[8][0] + 10
     with open('calibration_coordinates.csv', mode='w', newline='') as file_csv:
         writer = csv.writer(file_csv)
         for coordinate in saved_coordinates:

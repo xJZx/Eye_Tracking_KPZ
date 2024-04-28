@@ -14,6 +14,8 @@ def start_eye_tracking_calibration():
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     print("Resolution set to {}x{}".format(width, height))
 
+    is_space_pressed = False
+
     while True:
         video, frame = cap.read()  # keep reading until we get a frame
 
@@ -59,8 +61,8 @@ def start_eye_tracking_calibration():
         if key & 0xFF == ord('q'):
             break
         # elif key == ord(' '):
-        elif keyboard.is_pressed("space"):
-            if x_middle != 0 and y_middle != 0:
+        if keyboard.is_pressed("space"):
+            if x_middle != 0 and y_middle != 0 and not is_space_pressed:
                 if len(saved_coordinates) < 9:
                     # added extra margin for error
                     if len(saved_coordinates) < 3:
@@ -71,7 +73,10 @@ def start_eye_tracking_calibration():
                         saved_coordinates.append((x_middle, y_middle))
                 else:
                     break
-            time.sleep(0.2)  # Avoid high CPU usage
+            is_space_pressed = True
+            # time.sleep(0.2)  # Avoid high CPU usage
+        else:
+            is_space_pressed = False
 
     print(saved_coordinates)
     # saved_coordinates[0][0] += saved_coordinates[0][0] - 10

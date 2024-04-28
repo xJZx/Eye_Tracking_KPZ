@@ -22,6 +22,27 @@ def start_eye_tracking():
 
     print(saved_coordinates)
 
+    # taking screenshot of the main screen to refer to its width and height, to create sectors
+    screenshot = cv2.cvtColor(np.array(pg.screenshot()), cv2.COLOR_RGB2BGR)
+
+    # sector precision factor
+    s = 1
+
+    # calculating number of sectors in x and y
+    number_of_sectors_x = (screenshot.shape[:2][1] // (saved_coordinates[0][0] - saved_coordinates[2][0])) * s
+    number_of_sectors_y = (screenshot.shape[:2][0] // (saved_coordinates[6][1] - saved_coordinates[0][1])) * s
+
+    print("no. of x and y sectors", number_of_sectors_x, number_of_sectors_y)
+
+    # calculating each sector width and height
+    sector_width = screenshot.shape[:2][1] // number_of_sectors_x
+    sector_height = screenshot.shape[:2][0] // number_of_sectors_y
+
+    print("sector width and height", sector_width, sector_height)
+
+    # creating the 2D array of sectors of type int, filled with zeros
+    sectors = np.zeros((number_of_sectors_y, number_of_sectors_x), dtype=int)
+
     while True:
         screenshot = cv2.cvtColor(np.array(pg.screenshot()), cv2.COLOR_RGB2BGR)
 
@@ -63,30 +84,36 @@ def start_eye_tracking():
                 y_middle = abs(y1 - y_middle)
             break
 
-        # s = screenshot.shape[:2][1] / screenshot.shape[:2][0]
+        # calculating the ratio for transposition of the eye focus
         s_x = int(screenshot.shape[:2][1]) / (saved_coordinates[0][0] - saved_coordinates[2][0])
         s_y = int(screenshot.shape[:2][0]) / (saved_coordinates[6][1] - saved_coordinates[0][1])
+        # calculating new eye focus
         new_x = s_x * x_middle
         new_y = s_y * y_middle
-        # new_x = s * x_middle
-        # new_y = s * y_middle
+
         cv2.circle(screenshot, (int(new_x), int(new_y)), 5, (0, 0, 255), -1)
 
-        print("xmid", x_middle)
-        print("ymid", y_middle)
+        # finding which sector to increment
+        sector_x = int(new_x) // sector_width
+        sector_y = int(new_y) // sector_height
+
+        # incrementing the sector
+        if sector_x <= number_of_sectors_x and sector_y <= number_of_sectors_y:
+            sectors[sector_y][sector_x] += 1
+
+        # print("xmid", x_middle)
+        # print("ymid", y_middle)
         print("width", (saved_coordinates[0][0] - saved_coordinates[2][0]))
         print("height", (saved_coordinates[6][1] - saved_coordinates[0][1]))
-        print(screenshot.shape)
-        print(screenshot.shape[:2][0])
-        print(screenshot.shape[:2][1])
-        print("sx", s_x)
-        print("sy", s_y)
-        # print("s", s)
+        # print("sx", s_x)
+        # print("sy", s_y)
         print("x", new_x)
         print("x i", int(new_x))
         print("y", new_y)
         print("y i", int(new_y))
-
+        print("sector x", sector_x)
+        print("sector y", sector_y)
+        # print(sectors)
 
         cv2.imshow("threshold", threshold)
         cv2.imshow("gray frame", gray_frame)

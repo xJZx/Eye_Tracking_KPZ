@@ -98,7 +98,7 @@ def start_eye_tracking():
         sector_y = int(new_y) // sector_height
 
         # incrementing the sector
-        if sector_x <= number_of_sectors_x and sector_y <= number_of_sectors_y:
+        if sector_x < number_of_sectors_x and sector_y < number_of_sectors_y:
             sectors[sector_y][sector_x] += 1
 
         # print("xmid", x_middle)
@@ -122,4 +122,9 @@ def start_eye_tracking():
         cv2.imshow('captured_screen', screenshot)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+
+        with open('sectors.csv', mode='w', newline='') as file_csv:
+            writer = csv.writer(file_csv)
+            for sector in sectors:
+                writer.writerow(sector)
     cv2.destroyAllWindows()

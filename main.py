@@ -1,5 +1,6 @@
 import threading
 
+import heatmap
 import pupil_detection
 import pupil_detection_for_calibration
 import calibration
@@ -16,3 +17,5 @@ if __name__ == '__main__':
     t2.join()
 
     pupil_detection.start_eye_tracking()
+
+    heatmap.create_heatmap()

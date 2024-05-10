@@ -2,6 +2,7 @@ import cv2
 import csv
 import numpy as np
 import pyautogui as pg
+import math
 
 
 def start_eye_tracking():
@@ -69,6 +70,10 @@ def start_eye_tracking():
         x_middle = 0
         y_middle = 0
 
+        eye_radius = 40
+
+        non_linear_index = 0
+
         for cnt in contours:
             (x, y, w, h) = cv2.boundingRect(cnt)
             x_middle = int(x + (w / 2))
@@ -82,14 +87,27 @@ def start_eye_tracking():
                 # mirroring where the eye is looking
                 x_middle = abs(x_middle - x2)
                 y_middle = abs(y1 - y_middle)
+
+                # eyeball diameter 25mm
+                # divide by 4 because pixel :(
+                chord = ((math.sqrt((
+                    pow((saved_coordinates[4][0] - x_middle), 2) + pow((saved_coordinates[4][1] - y_middle), 2)))) * 0.26458)
+                # cosinus_alpha = (2 * (12.5 ** 2) - (chord ** 2)) / (2 * 12.5 * 12.5)
+                cosinus_alpha = 1 - ((chord ** 2) / (2 * (eye_radius ** 2)))
+                alpha = math.acos(cosinus_alpha)
+                arch = alpha * 2 * math.pi * eye_radius
+
+                non_linear_index = arch / chord
+
+                print(chord, cosinus_alpha, alpha, arch, non_linear_index)
             break
 
         # calculating the ratio for transposition of the eye focus
         s_x = int(screenshot.shape[:2][1]) / (saved_coordinates[0][0] - saved_coordinates[2][0])
         s_y = int(screenshot.shape[:2][0]) / (saved_coordinates[6][1] - saved_coordinates[0][1])
         # calculating new eye focus
-        new_x = s_x * x_middle
-        new_y = s_y * y_middle
+        new_x = s_x * x_middle * non_linear_index
+        new_y = s_y * y_middle * non_linear_index
 
         cv2.circle(screenshot, (int(new_x), int(new_y)), 5, (0, 0, 255), -1)
 
@@ -103,16 +121,16 @@ def start_eye_tracking():
 
         # print("xmid", x_middle)
         # print("ymid", y_middle)
-        print("width", (saved_coordinates[0][0] - saved_coordinates[2][0]))
-        print("height", (saved_coordinates[6][1] - saved_coordinates[0][1]))
-        # print("sx", s_x)
-        # print("sy", s_y)
-        print("x", new_x)
-        print("x i", int(new_x))
-        print("y", new_y)
-        print("y i", int(new_y))
-        print("sector x", sector_x)
-        print("sector y", sector_y)
+        #print("width", (saved_coordinates[0][0] - saved_coordinates[2][0]))
+        #print("height", (saved_coordinates[6][1] - saved_coordinates[0][1]))
+        print("sx", s_x)
+        print("sy", s_y)
+        # print("x", new_x)
+        # print("x i", int(new_x))
+        # print("y", new_y)
+        # print("y i", int(new_y))
+        # print("sector x", sector_x)
+        # print("sector y", sector_y)
         # print(sectors)
 
         cv2.imshow("threshold", threshold)

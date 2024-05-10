@@ -5,13 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="304bd287-c552-4019-9a48-8c7c094fd128" name="Changes" comment="Pupil detection. Simple calibration with saving 9 coordinates.">
-      <change afterPath="$PROJECT_DIR$/heatmap.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Eye_Tracking.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Eye_Tracking.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/calibration_coordinates.csv" beforeDir="false" afterPath="$PROJECT_DIR$/calibration_coordinates.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pupil_detection.py" beforeDir="false" afterPath="$PROJECT_DIR$/pupil_detection.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sectors.csv" beforeDir="false" afterPath="$PROJECT_DIR$/sectors.csv" afterDir="false" />
     </list>
     <list id="7330176c-507d-4008-a8c2-08f613c8eba6" name="Changes by piotr" comment="" />
     <option name="SHOW_DIALOG" value="false" />
@@ -202,6 +199,7 @@
       <workItem from="1714309543790" duration="2762000" />
       <workItem from="1714396042504" duration="234000" />
       <workItem from="1714402351137" duration="6427000" />
+      <workItem from="1715347746992" duration="12247000" />
     </task>
     <task id="LOCAL-00001" summary="Pupil detection. Simple calibration with saving 9 coordinates.">
       <option name="closed" value="true" />
@@ -300,7 +298,7 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Eye_Tracking$pupil_detection_2.coverage" NAME="pupil_detection_2 Coverage Results" MODIFIED="1712433620757" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/eye_tracking$main.coverage" NAME="main Coverage Results" MODIFIED="1714408567976" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/eye_tracking$main.coverage" NAME="main Coverage Results" MODIFIED="1715359744772" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Eye_Tracking$main.coverage" NAME="main Coverage Results" MODIFIED="1714311985972" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/eye_tracking$pupil_detection_for_calibration.coverage" NAME="pupil_detection_for_calibration Coverage Results" MODIFIED="1713470165324" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Eye_Tracking$pupil_detection.coverage" NAME="pupil_detection Coverage Results" MODIFIED="1712515951312" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

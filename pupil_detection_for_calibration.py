@@ -39,11 +39,11 @@ def start_eye_tracking_calibration():
         for cnt in contours:
             (x, y, w, h) = cv2.boundingRect(cnt)
 
-            if w > 5 and h > 5:
-                x_middle = int(x + (w / 2))
-                y_middle = int(y + (h / 2))
-            else:
-                print("Eye not detected!")
+            # if w > 5 and h > 5:
+            x_middle = int(x + (w / 2))
+            y_middle = int(y + (h / 2))
+            # else:
+            #     print("Eye not detected!")
 
             # cv2.drawContours(frame, [cnt], -1, (0, 0, 255), 3)
             cv2.rectangle(roi, (x, y), (x + w, y + h), (255, 0, 0), 2)

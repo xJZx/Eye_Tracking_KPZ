@@ -70,7 +70,7 @@ def start_eye_tracking():
         x_middle = 0
         y_middle = 0
 
-        eye_radius = 40
+        eye_radius = 13
 
         non_linear_index = 0
 
@@ -84,54 +84,80 @@ def start_eye_tracking():
                 cv2.line(roi, (x + int(w / 2), 0), (x + int(w / 2), rows), (0, 255, 0), 2)
                 cv2.line(roi, (0, y + int(h / 2)), (cols, y + int(h / 2)), (0, 255, 0), 2)
 
+                # as from trapezoid in paint
+                l = (math.sqrt((pow((x_middle - saved_coordinates[4][0]), 2) + (pow((y_middle - saved_coordinates[4][1]), 2))))) * 0.26458
+                print("l:", l)
+
                 # mirroring where the eye is looking
                 x_middle = abs(x_middle - x2)
                 y_middle = abs(y1 - y_middle)
 
+                if (eye_radius - l) >= 0:
+                    x = math.sqrt((eye_radius ** 2) - (l ** 2))
+                    print("x:", x)
+                else:
+                    x = eye_radius
+
+                a = eye_radius - x
+                print("a:", a)
+
+                s = math.sqrt((l ** 2) + (a ** 2))
+                print("s:", s)
+
+                cosinus_alpha = 1 - (s ** 2 / (2 * (eye_radius ** 2)))
+                alpha_rad = math.acos(cosinus_alpha)
+
+                alpha = math.degrees(alpha_rad)
+
+                arch = alpha / 360 * 2 * math.pi * eye_radius
+
                 # eyeball diameter 25mm
                 # divide by 4 because pixel :(
-                chord = ((math.sqrt((
-                    pow((saved_coordinates[4][0] - x_middle), 2) + pow((saved_coordinates[4][1] - y_middle), 2)))) * 0.26458)
-                # cosinus_alpha = (2 * (12.5 ** 2) - (chord ** 2)) / (2 * 12.5 * 12.5)
-                cosinus_alpha = 1 - ((chord ** 2) / (2 * (eye_radius ** 2)))
-                alpha = math.acos(cosinus_alpha)
-                arch = alpha * 2 * math.pi * eye_radius
+                # chord = ((math.sqrt((
+                #     pow((saved_coordinates[4][0] - x_middle), 2) + pow((saved_coordinates[4][1] - y_middle), 2)))) * 0.26458)
+                # cosinus_alpha = 1 - ((chord ** 2) / (2 * (eye_radius ** 2)))
+                # alpha = math.acos(cosinus_alpha)
+                # arch = alpha * 2 * math.pi * eye_radius
 
-                non_linear_index = arch / chord
+                # try arch / l, because l is the path of an eye and we want to compare arch to this, not the s
+                non_linear_index = arch / l
 
-                print(chord, cosinus_alpha, alpha, arch, non_linear_index)
+                print(l, x, a, s, cosinus_alpha, alpha, arch, non_linear_index)
+
+                # calculating the ratio for transposition of the eye focus
+                s_x = int(screenshot.shape[:2][1]) / (saved_coordinates[0][0] - saved_coordinates[2][0])
+                s_y = int(screenshot.shape[:2][0]) / (saved_coordinates[6][1] - saved_coordinates[0][1])
+                # calculating new eye focus
+                new_x = s_x * x_middle * non_linear_index
+                new_y = s_y * y_middle * non_linear_index
+
+                cv2.circle(screenshot, (int(new_x), int(new_y)), 5, (0, 0, 255), -1)
+
+                # finding which sector to increment
+                sector_x = int(new_x) // sector_width
+                sector_y = int(new_y) // sector_height
+
+                # incrementing the sector
+                if sector_x < number_of_sectors_x and sector_y < number_of_sectors_y:
+                    sectors[sector_y][sector_x] += 1
+
+                # print("xmid", x_middle)
+                # print("ymid", y_middle)
+                # print("width", (saved_coordinates[0][0] - saved_coordinates[2][0]))
+                # print("height", (saved_coordinates[6][1] - saved_coordinates[0][1]))
+                print("sx", s_x)
+                print("sy", s_y)
+                # print("x", new_x)
+                # print("x i", int(new_x))
+                # print("y", new_y)
+                # print("y i", int(new_y))
+                # print("sector x", sector_x)
+                # print("sector y", sector_y)
+                # print(sectors)
+
+            else:
+                break
             break
-
-        # calculating the ratio for transposition of the eye focus
-        s_x = int(screenshot.shape[:2][1]) / (saved_coordinates[0][0] - saved_coordinates[2][0])
-        s_y = int(screenshot.shape[:2][0]) / (saved_coordinates[6][1] - saved_coordinates[0][1])
-        # calculating new eye focus
-        new_x = s_x * x_middle * non_linear_index
-        new_y = s_y * y_middle * non_linear_index
-
-        cv2.circle(screenshot, (int(new_x), int(new_y)), 5, (0, 0, 255), -1)
-
-        # finding which sector to increment
-        sector_x = int(new_x) // sector_width
-        sector_y = int(new_y) // sector_height
-
-        # incrementing the sector
-        if sector_x < number_of_sectors_x and sector_y < number_of_sectors_y:
-            sectors[sector_y][sector_x] += 1
-
-        # print("xmid", x_middle)
-        # print("ymid", y_middle)
-        #print("width", (saved_coordinates[0][0] - saved_coordinates[2][0]))
-        #print("height", (saved_coordinates[6][1] - saved_coordinates[0][1]))
-        print("sx", s_x)
-        print("sy", s_y)
-        # print("x", new_x)
-        # print("x i", int(new_x))
-        # print("y", new_y)
-        # print("y i", int(new_y))
-        # print("sector x", sector_x)
-        # print("sector y", sector_y)
-        # print(sectors)
 
         cv2.imshow("threshold", threshold)
         cv2.imshow("gray frame", gray_frame)

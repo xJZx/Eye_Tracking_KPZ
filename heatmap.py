@@ -42,4 +42,3 @@ def create_heatmap():
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-

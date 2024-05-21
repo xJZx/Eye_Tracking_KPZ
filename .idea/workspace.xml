@@ -34,7 +34,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="master" />
+        <entry key="$PROJECT_DIR$" value="non-linear" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -178,9 +178,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.pupil_detection_for_calibration" />
+        <item itemvalue="Python.main" />
+        <item itemvalue="Python.capture_the_screen" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.pupil_detection_for_calibration" />
-        <item itemvalue="Python.capture_the_screen" />
       </list>
     </recent_temporary>
   </component>
@@ -221,7 +223,9 @@
 =======
       <workItem from="1715590199201" duration="5037000" />
       <workItem from="1715610288152" duration="430000" />
-      <workItem from="1715715756156" duration="274000" />
+      <workItem from="1715715756156" duration="627000" />
+      <workItem from="1716216984760" duration="221000" />
+      <workItem from="1716313476868" duration="1195000" />
 >>>>>>> bd31d1f44f0a8eecbc191f8a95e0dbb74115f873
     </task>
     <task id="LOCAL-00001" summary="Pupil detection. Simple calibration with saving 9 coordinates.">
@@ -280,7 +284,15 @@
       <option name="project" value="LOCAL" />
       <updated>1714243870557</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Added non-linearity index, to better calculate transformation of the eye sight point.">
+      <option name="closed" value="true" />
+      <created>1715716046306</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1715716046306</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -317,7 +329,8 @@
     <MESSAGE value="ROI Added. Fixed calculating the middle of the eye. Better detecting when the eye is visible." />
     <MESSAGE value="Now it is possible to determine, when the eye is looking at the screen. Added borders showing when the eye is not looking at the screen." />
     <MESSAGE value="Now it is possible to set another calibration point and save coordinates simultaneously. Also added some margin of error into eye plane for better detection." />
-    <option name="LAST_COMMIT_MESSAGE" value="Now it is possible to set another calibration point and save coordinates simultaneously. Also added some margin of error into eye plane for better detection." />
+    <MESSAGE value="Added non-linearity index, to better calculate transformation of the eye sight point." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added non-linearity index, to better calculate transformation of the eye sight point." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
 <<<<<<< HEAD

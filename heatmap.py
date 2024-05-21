@@ -6,15 +6,18 @@ import cv2
 import pyautogui as pg
 
 
-def create_heatmap():
+def make_screenshot():
+    screenshot = cv2.cvtColor(np.array(pg.screenshot()), cv2.COLOR_RGB2BGR)
+    return screenshot
+
+
+def create_heatmap(screenshot):
     sectors = []
 
     with open('sectors.csv', mode='r', newline='') as file_csv:
         reader = csv.reader(file_csv)
         for row in reader:
             sectors.append(row)
-
-    screenshot = cv2.cvtColor(np.array(pg.screenshot()), cv2.COLOR_RGB2BGR)
 
     sector_width = screenshot.shape[:2][1] // len(sectors[0])
     sector_height = screenshot.shape[:2][0] // len(sectors)
@@ -44,7 +47,7 @@ def create_heatmap():
             break
 
 
-def create_gazeplots():
+def create_gazeplots(screenshot):
     coordinates = []
 
     with open('circle_coordinates.csv', mode='r', newline='') as file_csv:

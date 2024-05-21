@@ -52,9 +52,9 @@ def start_eye_tracking_calibration():
             cv2.line(roi, (0, y + int(h / 2)), (cols, y + int(h / 2)), (0, 255, 0), 2)
             break
 
-        cv2.imshow("threshold", threshold)
-        cv2.imshow("gray frame", gray_frame)
-        cv2.imshow("frame", frame)
+        # cv2.imshow("threshold", threshold)
+        # cv2.imshow("gray frame", gray_frame)
+        # cv2.imshow("frame", frame)
         cv2.imshow("roi", roi)
 
         key = cv2.waitKey(1)

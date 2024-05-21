@@ -42,3 +42,46 @@ def create_heatmap():
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+
+
+def create_gazeplots():
+    coordinates = []
+
+    with open('circle_coordinates.csv', mode='r', newline='') as file_csv:
+        reader = csv.reader(file_csv)
+        for row in reader:
+            coordinates.append(row)
+
+    print(coordinates)
+
+    screenshot = cv2.cvtColor(np.array(pg.screenshot()), cv2.COLOR_RGB2BGR)
+
+    point_color = (0, 0, 255)  # Czerwony
+    line_color = (0, 255, 0)  # Zielony
+    thickness = 2
+
+    first_point = True
+    for point in coordinates:
+        point[0] = float(point[0])
+        point[1] = float(point[1])
+        point[0] = int(point[0])
+        point[1] = int(point[1])
+        print(point)
+        if first_point:
+            cv2.circle(screenshot, tuple(point), 5, (255, 0, 0), -1)
+            first_point = False
+        else:
+            cv2.circle(screenshot, tuple(point), 5, point_color, -1)
+
+    # Narysuj linie między punktami
+    for i in range(len(coordinates) - 1):
+        start_point = coordinates[i]
+        end_point = coordinates[i + 1]
+        cv2.line(screenshot, start_point, end_point, line_color, thickness)
+
+    while True:
+        cv2.imshow("gazeplots", screenshot)
+
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+

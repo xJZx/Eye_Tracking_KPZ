@@ -84,3 +84,4 @@ def create_gazeplots():
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+

@@ -3,6 +3,7 @@ import csv
 import numpy as np
 import pyautogui as pg
 import math
+import time
 
 
 def start_eye_tracking():
@@ -15,6 +16,15 @@ def start_eye_tracking():
     print("Resolution set to {}x{}".format(width, height))
 
     saved_coordinates = []
+
+    # recording
+    screen_size = pg.size()
+    rikord_widjo = cv2.VideoWriter('screen_recording.avi', cv2.VideoWriter_fourcc(*"XVID"), 20, (screen_size.width, screen_size.height))
+
+    time_counter = 0
+
+    with open('circle_coordinates.csv', 'w') as file:  # delete data form file
+        pass
 
     with open('calibration_coordinates.csv', mode='r', newline='') as file_csv:
         reader = csv.reader(file_csv)
@@ -111,6 +121,12 @@ def start_eye_tracking():
 
         cv2.circle(screenshot, (int(new_x), int(new_y)), 5, (0, 0, 255), -1)
 
+        if time.perf_counter() - time_counter > 1:
+            with open('circle_coordinates.csv', mode='a', newline='') as file_csv:
+                writer = csv.writer(file_csv)
+                writer.writerow([new_x, new_y])
+            time_counter = time.perf_counter()
+
         # finding which sector to increment
         sector_x = int(new_x) // sector_width
         sector_y = int(new_y) // sector_height
@@ -132,6 +148,8 @@ def start_eye_tracking():
         # print("sector x", sector_x)
         # print("sector y", sector_y)
         # print(sectors)
+
+        rikord_widjo.write(screenshot)
 
         cv2.imshow("threshold", threshold)
         cv2.imshow("gray frame", gray_frame)

@@ -18,8 +18,7 @@ if __name__ == '__main__':
     pupil_detection.start_eye_tracking()
 
     screenshot = heatmap.make_screenshot()
-    screenshot1 = heatmap.make_screenshot()
     heatmap.create_gazeplots(screenshot)
     heatmap.create_heatmap(screenshot)
-    heatmap.create_colored_heatmap_colormap(screenshot1)
+    heatmap.create_colored_heatmap_colormap(screenshot)
 

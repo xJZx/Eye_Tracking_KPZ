@@ -80,6 +80,7 @@ def start_eye_tracking():
         x_middle = 0
         y_middle = 0
 
+        # eyeball diameter ~25mm
         eye_radius = 13
 
         non_linear_index = 0
@@ -95,6 +96,7 @@ def start_eye_tracking():
                 cv2.line(roi, (0, y + int(h / 2)), (cols, y + int(h / 2)), (0, 255, 0), 2)
 
                 # as from trapezoid in paint
+                # divide by 4 because pixel :(
                 l = (math.sqrt((pow((x_middle - saved_coordinates[4][0]), 2) + (pow((y_middle - saved_coordinates[4][1]), 2))))) * 0.26458
                 print("l:", l)
 
@@ -121,16 +123,10 @@ def start_eye_tracking():
 
                 arch = alpha / 360 * 2 * math.pi * eye_radius
 
-                # eyeball diameter 25mm
-                # divide by 4 because pixel :(
-                # chord = ((math.sqrt((
-                #     pow((saved_coordinates[4][0] - x_middle), 2) + pow((saved_coordinates[4][1] - y_middle), 2)))) * 0.26458)
-                # cosinus_alpha = 1 - ((chord ** 2) / (2 * (eye_radius ** 2)))
-                # alpha = math.acos(cosinus_alpha)
-                # arch = alpha * 2 * math.pi * eye_radius
-
                 # try arch / l, because l is the path of an eye and we want to compare arch to this, not the s
-                non_linear_index = arch / l
+                # l != 0 because if x and y middle are perfectly in the center of the pupil plane
+                if l != 0:
+                    non_linear_index = arch / l
 
                 print(l, x, a, s, cosinus_alpha, alpha, arch, non_linear_index)
 

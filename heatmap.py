@@ -35,8 +35,8 @@ def create_colored_heatmap_colormap(screenshot):
             # Normalizacja
             norm_value = int(sectors[y][x]) / max_sector_value
             
-            # Pomijamy wartosci poniżej 0.07
-            if norm_value < 0.07:
+            # Pomijamy wartosci poniżej 0.02
+            if norm_value < 0.02:
                 continue
 
             # Szary pixel    

@@ -8,6 +8,7 @@ import pyautogui as pg
 
 def make_screenshot():
     screenshot = cv2.cvtColor(np.array(pg.screenshot()), cv2.COLOR_RGB2BGR)
+    cv2.imwrite('screenshot.png', screenshot)
     return screenshot
 
 def create_colored_heatmap_colormap(screenshot):
@@ -56,6 +57,7 @@ def create_colored_heatmap_colormap(screenshot):
         cv2.imshow("Colored heatmap", screenshot)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
+            cv2.imwrite("screenshot_with_heatmaps.png", screenshot)
             break          
 
 

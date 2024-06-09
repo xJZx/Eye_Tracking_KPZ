@@ -8,7 +8,7 @@ import time
 
 def start_eye_tracking():
 
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(1)
 
     # Check if the width and height were set successfully
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))

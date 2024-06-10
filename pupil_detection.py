@@ -59,7 +59,7 @@ def start_eye_tracking():
 
         video, frame = cap.read()  # keep reading until we get a frame
 
-        roi = frame[100:500, 100:500]
+        roi = frame[0:500, 0:500]
 
         rows, cols, _ = roi.shape
 
@@ -139,8 +139,18 @@ def start_eye_tracking():
             s_x = int(screenshot.shape[:2][1]) / (saved_coordinates[0][0] - saved_coordinates[2][0])
             s_y = int(screenshot.shape[:2][0]) / (saved_coordinates[6][1] - saved_coordinates[0][1])
             # calculating new eye focus
-            new_x = s_x * x_middle * non_linear_index
-            new_y = s_y * y_middle * non_linear_index
+
+            # half of the screen correct for non_linear_index
+            if y_middle > saved_coordinates[4][1]:
+                new_y = s_y * y_middle * non_linear_index
+            else:
+                # 2 - non_linear_index because in the upper half of the screen we want to lower the value, because number of pixel is growing from the upper-left corner
+                new_y = s_y * y_middle * (2 - non_linear_index)
+
+            if x_middle > saved_coordinates[4][0]:
+                new_x = s_x * x_middle * non_linear_index
+            else:
+                new_x = s_x * x_middle * (2 - non_linear_index)
 
             cv2.circle(screenshot, (int(new_x), int(new_y)), 5, (0, 0, 255), -1)
 
@@ -171,6 +181,37 @@ def start_eye_tracking():
             # print("sector x", sector_x)
             # print("sector y", sector_y)
             # print(sectors)
+
+            print("------------------")
+            print(int(abs(saved_coordinates[0][0] - x2) * s_x))
+            print(int(abs(y1 - saved_coordinates[0][1]) * s_y))
+            print(int(abs(saved_coordinates[1][0] - x2) * s_x))
+            print(int(abs(y1 - saved_coordinates[1][1]) * s_y))
+            print(int(abs(saved_coordinates[2][0] - x2) * s_x))
+            print(int(abs(y1 - saved_coordinates[2][1]) * s_y))
+            print("---")
+            print(int(abs(saved_coordinates[4][0] - x2) * s_x))
+            print(int(abs(y1 - saved_coordinates[4][1]) * s_y))
+            print("---")
+            print(int(abs(saved_coordinates[6][0] - x2) * s_x))
+            print(int(abs(y1 - saved_coordinates[6][1]) * s_y))
+            print(int(abs(saved_coordinates[7][0] - x2) * s_x))
+            print(int(abs(y1 - saved_coordinates[7][1]) * s_y))
+            print(int(abs(saved_coordinates[8][0] - x2) * s_x))
+            print(int(abs(y1 - saved_coordinates[8][1]) * s_y))
+
+            cv2.circle(screenshot, (int(abs(saved_coordinates[0][0] - x2) * s_x), int(abs(y1 - saved_coordinates[0][1]) * s_y)), 10, (0, 255, 0), -1)
+            cv2.circle(screenshot, (int(abs(saved_coordinates[1][0] - x2) * s_x), int(abs(y1 - saved_coordinates[1][1]) * s_y)), 10, (0, 255, 0), -1)
+            cv2.circle(screenshot, (int(abs(saved_coordinates[2][0] - x2) * s_x), int(abs(y1 - saved_coordinates[2][1]) * s_y)), 10, (0, 255, 0), -1)
+            cv2.circle(screenshot, (int(abs(saved_coordinates[3][0] - x2) * s_x), int(abs(y1 - saved_coordinates[3][1]) * s_y)), 10, (0, 255, 0), -1)
+            cv2.circle(screenshot, (int(abs(saved_coordinates[4][0] - x2) * s_x), int(abs(y1 - saved_coordinates[4][1]) * s_y)), 10, (0, 255, 0), -1)
+            cv2.circle(screenshot, (int(abs(saved_coordinates[5][0] - x2) * s_x), int(abs(y1 - saved_coordinates[5][1]) * s_y)), 10, (0, 255, 0), -1)
+            cv2.circle(screenshot, (int(abs(saved_coordinates[6][0] - x2) * s_x), int(abs(y1 - saved_coordinates[6][1]) * s_y)), 10, (0, 255, 0), -1)
+            cv2.circle(screenshot, (int(abs(saved_coordinates[7][0] - x2) * s_x), int(abs(y1 - saved_coordinates[7][1]) * s_y)), 10, (0, 255, 0), -1)
+            cv2.circle(screenshot, (int(abs(saved_coordinates[8][0] - x2) * s_x), int(abs(y1 - saved_coordinates[8][1]) * s_y)), 10, (0, 255, 0), -1)
+
+            cv2.circle(screenshot, (300, 300), 10, (255, 0, 0), -1)
+            cv2.circle(screenshot, (900, 900), 10, (255, 0, 0), -1)
 
             rikord_widjo.write(screenshot)
 

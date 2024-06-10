@@ -19,7 +19,7 @@ def start_eye_tracking_calibration():
     while True:
         video, frame = cap.read()  # keep reading until we get a frame
 
-        roi = frame[100:500, 100:500]
+        roi = frame[0:500, 0:500]
 
         rows, cols, _ = roi.shape
 
@@ -63,12 +63,18 @@ def start_eye_tracking_calibration():
         # elif key == ord(' '):
         if keyboard.is_pressed("space"):
             if x_middle != 0 and y_middle != 0 and not is_space_pressed:
-                if len(saved_coordinates) < 9:
+                if len(saved_coordinates) <= 8:
                     # added extra margin for error
-                    if len(saved_coordinates) < 3:
-                        saved_coordinates.append((x_middle, y_middle - 15))
-                    elif len(saved_coordinates) > 5:
-                        saved_coordinates.append((x_middle, y_middle + 15))
+                    if len(saved_coordinates) <= 2:
+                        if len(saved_coordinates) % 2 == 0:
+                            saved_coordinates.append((x_middle - 10, y_middle - 10))
+                        else:
+                            saved_coordinates.append((x_middle, y_middle - 10))
+                    elif len(saved_coordinates) >= 6:
+                        if len(saved_coordinates) % 2 == 0:
+                            saved_coordinates.append((x_middle + 10, y_middle))
+                        else:
+                            saved_coordinates.append((x_middle, y_middle))
                     else:
                         saved_coordinates.append((x_middle, y_middle))
                 else:
@@ -78,7 +84,6 @@ def start_eye_tracking_calibration():
         else:
             is_space_pressed = False
 
-    print(saved_coordinates)
     # saved_coordinates[0][0] += saved_coordinates[0][0] - 10
     # saved_coordinates[1][0] += saved_coordinates[1][0] - 10
     # saved_coordinates[2][0] += saved_coordinates[2][0] - 10
@@ -86,6 +91,9 @@ def start_eye_tracking_calibration():
     # saved_coordinates[6][0] += saved_coordinates[6][0] + 10
     # saved_coordinates[7][0] += saved_coordinates[7][0] + 10
     # saved_coordinates[8][0] += saved_coordinates[8][0] + 10
+
+    print(saved_coordinates)
+
     with open('calibration_coordinates.csv', mode='w', newline='') as file_csv:
         writer = csv.writer(file_csv)
         for coordinate in saved_coordinates:

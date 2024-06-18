@@ -4,6 +4,7 @@ import numpy as np
 import pyautogui as pg
 import math
 import time
+import video_heatmap
 
 
 def start_eye_tracking():
@@ -15,11 +16,13 @@ def start_eye_tracking():
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     print("Resolution set to {}x{}".format(width, height))
 
-    saved_coordinates = []
-
     # recording
     screen_size = pg.size()
     rikord_widjo = cv2.VideoWriter('screen_recording.avi', cv2.VideoWriter_fourcc(*"XVID"), 20, (screen_size.width, screen_size.height))
+
+    # Initialize the blank heatmap (black background)
+    heatmap = np.zeros((screen_size[1], screen_size[0], 3), dtype=np.uint8)
+    saved_coordinates = []
 
     time_counter = 0
 
@@ -117,7 +120,11 @@ def start_eye_tracking():
                 print("s:", s)
 
                 cosinus_alpha = 1 - (s ** 2 / (2 * (eye_radius ** 2)))
-                alpha_rad = math.acos(cosinus_alpha)
+                print("cosinus_alpha:", cosinus_alpha)
+                if -1 < cosinus_alpha < 1:
+                    alpha_rad = math.acos(cosinus_alpha)
+                else:
+                    break
 
                 alpha = math.degrees(alpha_rad)
 
@@ -168,6 +175,13 @@ def start_eye_tracking():
             if sector_x < number_of_sectors_x and sector_y < number_of_sectors_y:
                 sectors[sector_y][sector_x] += 1
 
+            # generate video heatmap
+            video_heatmap.create_heatmap(heatmap, screen_size[1], screen_size[0], int(new_x), int(new_y))
+            screenshot = video_heatmap.apply_heatmap_to_frame(heatmap, screenshot)
+
+            # cool down the heatmap
+            heatmap = video_heatmap.fade_heatmap(heatmap)
+
             # print("xmid", x_middle)
             # print("ymid", y_middle)
             #print("width", (saved_coordinates[0][0] - saved_coordinates[2][0]))
@@ -182,36 +196,36 @@ def start_eye_tracking():
             # print("sector y", sector_y)
             # print(sectors)
 
-            print("------------------")
-            print(int(abs(saved_coordinates[0][0] - x2) * s_x))
-            print(int(abs(y1 - saved_coordinates[0][1]) * s_y))
-            print(int(abs(saved_coordinates[1][0] - x2) * s_x))
-            print(int(abs(y1 - saved_coordinates[1][1]) * s_y))
-            print(int(abs(saved_coordinates[2][0] - x2) * s_x))
-            print(int(abs(y1 - saved_coordinates[2][1]) * s_y))
-            print("---")
-            print(int(abs(saved_coordinates[4][0] - x2) * s_x))
-            print(int(abs(y1 - saved_coordinates[4][1]) * s_y))
-            print("---")
-            print(int(abs(saved_coordinates[6][0] - x2) * s_x))
-            print(int(abs(y1 - saved_coordinates[6][1]) * s_y))
-            print(int(abs(saved_coordinates[7][0] - x2) * s_x))
-            print(int(abs(y1 - saved_coordinates[7][1]) * s_y))
-            print(int(abs(saved_coordinates[8][0] - x2) * s_x))
-            print(int(abs(y1 - saved_coordinates[8][1]) * s_y))
+            # print("------------------")
+            # print(int(abs(saved_coordinates[0][0] - x2) * s_x))
+            # print(int(abs(y1 - saved_coordinates[0][1]) * s_y))
+            # print(int(abs(saved_coordinates[1][0] - x2) * s_x))
+            # print(int(abs(y1 - saved_coordinates[1][1]) * s_y))
+            # print(int(abs(saved_coordinates[2][0] - x2) * s_x))
+            # print(int(abs(y1 - saved_coordinates[2][1]) * s_y))
+            # print("---")
+            # print(int(abs(saved_coordinates[4][0] - x2) * s_x))
+            # print(int(abs(y1 - saved_coordinates[4][1]) * s_y))
+            # print("---")
+            # print(int(abs(saved_coordinates[6][0] - x2) * s_x))
+            # print(int(abs(y1 - saved_coordinates[6][1]) * s_y))
+            # print(int(abs(saved_coordinates[7][0] - x2) * s_x))
+            # print(int(abs(y1 - saved_coordinates[7][1]) * s_y))
+            # print(int(abs(saved_coordinates[8][0] - x2) * s_x))
+            # print(int(abs(y1 - saved_coordinates[8][1]) * s_y))
 
-            cv2.circle(screenshot, (int(abs(saved_coordinates[0][0] - x2) * s_x), int(abs(y1 - saved_coordinates[0][1]) * s_y)), 10, (0, 255, 0), -1)
-            cv2.circle(screenshot, (int(abs(saved_coordinates[1][0] - x2) * s_x), int(abs(y1 - saved_coordinates[1][1]) * s_y)), 10, (0, 255, 0), -1)
-            cv2.circle(screenshot, (int(abs(saved_coordinates[2][0] - x2) * s_x), int(abs(y1 - saved_coordinates[2][1]) * s_y)), 10, (0, 255, 0), -1)
-            cv2.circle(screenshot, (int(abs(saved_coordinates[3][0] - x2) * s_x), int(abs(y1 - saved_coordinates[3][1]) * s_y)), 10, (0, 255, 0), -1)
-            cv2.circle(screenshot, (int(abs(saved_coordinates[4][0] - x2) * s_x), int(abs(y1 - saved_coordinates[4][1]) * s_y)), 10, (0, 255, 0), -1)
-            cv2.circle(screenshot, (int(abs(saved_coordinates[5][0] - x2) * s_x), int(abs(y1 - saved_coordinates[5][1]) * s_y)), 10, (0, 255, 0), -1)
-            cv2.circle(screenshot, (int(abs(saved_coordinates[6][0] - x2) * s_x), int(abs(y1 - saved_coordinates[6][1]) * s_y)), 10, (0, 255, 0), -1)
-            cv2.circle(screenshot, (int(abs(saved_coordinates[7][0] - x2) * s_x), int(abs(y1 - saved_coordinates[7][1]) * s_y)), 10, (0, 255, 0), -1)
-            cv2.circle(screenshot, (int(abs(saved_coordinates[8][0] - x2) * s_x), int(abs(y1 - saved_coordinates[8][1]) * s_y)), 10, (0, 255, 0), -1)
-
-            cv2.circle(screenshot, (300, 300), 10, (255, 0, 0), -1)
-            cv2.circle(screenshot, (900, 900), 10, (255, 0, 0), -1)
+            # cv2.circle(screenshot, (int(abs(saved_coordinates[0][0] - x2) * s_x), int(abs(y1 - saved_coordinates[0][1]) * s_y)), 10, (0, 255, 0), -1)
+            # cv2.circle(screenshot, (int(abs(saved_coordinates[1][0] - x2) * s_x), int(abs(y1 - saved_coordinates[1][1]) * s_y)), 10, (0, 255, 0), -1)
+            # cv2.circle(screenshot, (int(abs(saved_coordinates[2][0] - x2) * s_x), int(abs(y1 - saved_coordinates[2][1]) * s_y)), 10, (0, 255, 0), -1)
+            # cv2.circle(screenshot, (int(abs(saved_coordinates[3][0] - x2) * s_x), int(abs(y1 - saved_coordinates[3][1]) * s_y)), 10, (0, 255, 0), -1)
+            # cv2.circle(screenshot, (int(abs(saved_coordinates[4][0] - x2) * s_x), int(abs(y1 - saved_coordinates[4][1]) * s_y)), 10, (0, 255, 0), -1)
+            # cv2.circle(screenshot, (int(abs(saved_coordinates[5][0] - x2) * s_x), int(abs(y1 - saved_coordinates[5][1]) * s_y)), 10, (0, 255, 0), -1)
+            # cv2.circle(screenshot, (int(abs(saved_coordinates[6][0] - x2) * s_x), int(abs(y1 - saved_coordinates[6][1]) * s_y)), 10, (0, 255, 0), -1)
+            # cv2.circle(screenshot, (int(abs(saved_coordinates[7][0] - x2) * s_x), int(abs(y1 - saved_coordinates[7][1]) * s_y)), 10, (0, 255, 0), -1)
+            # cv2.circle(screenshot, (int(abs(saved_coordinates[8][0] - x2) * s_x), int(abs(y1 - saved_coordinates[8][1]) * s_y)), 10, (0, 255, 0), -1)
+            #
+            # cv2.circle(screenshot, (300, 300), 10, (255, 0, 0), -1)
+            # cv2.circle(screenshot, (900, 900), 10, (255, 0, 0), -1)
 
             rikord_widjo.write(screenshot)
 

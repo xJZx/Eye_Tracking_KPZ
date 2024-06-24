@@ -24,6 +24,6 @@ def fade_heatmap(heatmap):
 
 
 def apply_heatmap_to_frame(heatmap, frame):
-    colored_heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_MAGMA)
+    colored_heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_INFERNO)
     frame = cv2.addWeighted(frame, 1.0, colored_heatmap, 0.5, 0)
     return frame

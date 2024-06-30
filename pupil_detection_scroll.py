@@ -32,7 +32,7 @@ def start_eye_tracking():
 
     # recording
     screen_size = pg.size()
-    rikord_widjo = cv2.VideoWriter('screen_recording.avi', cv2.VideoWriter_fourcc(*"XVID"), 20, (screen_size.width, screen_size.height))
+    rikord_widjo = cv2.VideoWriter('screen_recording.avi', cv2.VideoWriter_fourcc(*"XVID"), 10, (screen_size.width, screen_size.height))
 
     # Initialize the blank heatmap (black background)
     heatmap = np.zeros((screen_size[1], screen_size[0], 3), dtype=np.uint8)
@@ -175,11 +175,11 @@ def start_eye_tracking():
             scroll_y = int(driver.execute_script("return window.scrollY;"))
             sector_x = int(new_x) // sector_width
             sector_y = int(new_y) // sector_height + scroll_y // (page_height//number_of_sectors_y)
-            print(scroll_y)
-            print(scroll_y // 107)
-            print(new_y)
-            print(new_y // sector_height)
-            print(sector_x, sector_y)
+            # print(scroll_y)
+            # print(scroll_y // 107)
+            # print(new_y)
+            # print(new_y // sector_height)
+            # print(sector_x, sector_y)
 
             # incrementing the sector
             if sector_x < number_of_sectors_x and sector_y < number_of_sectors_y:
@@ -194,7 +194,7 @@ def start_eye_tracking():
 
             cv2.circle(screenshot, (int(new_x), int(new_y)), 5, (0, 0, 255), -1)
 
-            rikord_widjo.write(screenshot)
+        rikord_widjo.write(screenshot)
 
         # cv2.imshow("threshold", threshold)
         # cv2.imshow("gray frame", gray_frame)

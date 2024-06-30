@@ -17,7 +17,7 @@ def start_eye_tracking():
     driver = webdriver.Chrome()
 
     # Open the website
-    url = 'https://pl.wikipedia.org/wiki/Ko%C5%82owa_Szczerbina'  # Replace with the website you want to open
+    url = 'https://rekrutacja.pwr.edu.pl/'  # Replace with the website you want to open
     driver.get(url)
 
     page_height = driver.execute_script("return document.body.scrollHeight;")
@@ -165,8 +165,6 @@ def start_eye_tracking():
             else:
                 new_x = s_x * x_middle * (2 - non_linear_index)
 
-            cv2.circle(screenshot, (int(new_x), int(new_y)), 5, (0, 0, 255), -1)
-
             if time.perf_counter() - time_counter > 1:
                 with open('circle_coordinates.csv', mode='a', newline='') as file_csv:
                     writer = csv.writer(file_csv)
@@ -189,10 +187,12 @@ def start_eye_tracking():
 
             # generate video heatmap
             video_heatmap.create_heatmap(heatmap, screen_size[1], screen_size[0], int(new_x), int(new_y))
-            screenshot = video_heatmap.apply_heatmap_to_frame(heatmap, screenshot)
+            screenshot = video_heatmap.apply_heatmap_to_frame_custom_intensity(heatmap, screenshot)
 
             # cool down the heatmap
             heatmap = video_heatmap.fade_heatmap(heatmap)
+
+            cv2.circle(screenshot, (int(new_x), int(new_y)), 5, (0, 0, 255), -1)
 
             rikord_widjo.write(screenshot)
 

@@ -17,9 +17,10 @@ if __name__ == '__main__':
     t2.join()
 
     pupil_detection_scroll.start_eye_tracking()
+    # pupil_detection.start_eye_tracking()
 
-    # screenshot = static_heatmap.make_screenshot()
-    # static_heatmap.create_gazeplots(screenshot)
-    # static_heatmap.create_heatmap(screenshot)
-    # static_heatmap.create_colored_heatmap_colormap(screenshot)
+    screenshot = static_heatmap.make_screenshot()
+    static_heatmap.create_gazeplots(screenshot)
+    static_heatmap.create_heatmap(screenshot)
+    static_heatmap.create_colored_heatmap_colormap(screenshot)
 

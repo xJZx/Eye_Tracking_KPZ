@@ -27,3 +27,17 @@ def apply_heatmap_to_frame(heatmap, frame):
     colored_heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_INFERNO)
     frame = cv2.addWeighted(frame, 1.0, colored_heatmap, 0.5, 0)
     return frame
+
+
+def enhance_colormap_intensity(colormap, factor=1.5):
+    colormap = colormap.astype(np.float32) * factor
+    colormap = np.clip(colormap, 0, 255).astype(np.uint8)
+    return colormap
+
+
+def apply_heatmap_to_frame_custom_intensity(heatmap, frame, heatmap_intensity=0.5, intensity_factor=1.5):
+    colormap = cv2.applyColorMap(np.arange(256, dtype=np.uint8), cv2.COLORMAP_INFERNO)
+    enhanced_colormap = enhance_colormap_intensity(colormap, intensity_factor)
+    colored_heatmap = cv2.LUT(heatmap, enhanced_colormap)
+    frame = cv2.addWeighted(frame, 1.0, colored_heatmap, heatmap_intensity, 0)
+    return frame

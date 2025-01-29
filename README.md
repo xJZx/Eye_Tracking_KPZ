@@ -24,10 +24,10 @@ A device using endoscopic camera to track the user's gaze to create heatmaps and
 * Recording the screen during the UX Design test.
 * Creating hetmaps and gazeplots maps to UX Design analysis.
 
-###Gazeplots map
+### Gazeplots map
 ![Gazeplots maps](images/gazeplot.png)
 
-###Heatmap
+### Heatmap
 ![Heatmap](images/heatmap.png)
 
 ## Authors
